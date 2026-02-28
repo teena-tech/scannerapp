@@ -2,19 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import '../../data/datasource/google_sheet_service.dart';
 import '../../data/datasource/local_datasource.dart';
 import '../../data/datasource/ocr_datasource.dart';
 import '../../models/contact_model.dart';
-import '../providers/contact_provider.dart';
 import 'dashboard_screen.dart';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-
-import '../../models/contact_model.dart';
 
 class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
@@ -132,10 +124,8 @@ class _ScanScreenState extends State<ScanScreen> {
         date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
       );
 
-      // Save locally (Hive)
       await localDataSource.saveContact(contact);
 
-      // Save to Google Sheet
       await sheetService.save(contact);
 
       setState(() {
@@ -189,7 +179,6 @@ Website: $website
           children: [
             const SizedBox(height: 20),
 
-            /// FRONT IMAGE
             Card(
               child: Column(
                 children: [
@@ -210,7 +199,6 @@ Website: $website
 
             const SizedBox(height: 20),
 
-            /// BACK IMAGE
             Card(
               child: Column(
                 children: [
@@ -231,7 +219,6 @@ Website: $website
 
             const SizedBox(height: 30),
 
-            /// SCAN BUTTON
             isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : ElevatedButton.icon(
@@ -242,7 +229,6 @@ Website: $website
 
             const SizedBox(height: 20),
 
-            /// RESULT
             Text(extractedText),
           ],
         ),

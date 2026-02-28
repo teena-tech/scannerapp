@@ -9,7 +9,6 @@ class ContactProvider extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
 
-  // Example Hive box (make sure you already defined this correctly)
   final hiveBox;
 
   ContactProvider(this.hiveBox);
@@ -19,10 +18,8 @@ class ContactProvider extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      // Save locally (Hive)
       await hiveBox.add(contact);
 
-      // Save to Google Sheet
       await _sheetService.save(contact);
     } catch (e) {
       errorMessage = e.toString();

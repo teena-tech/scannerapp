@@ -22,7 +22,6 @@ class GoogleSheetService {
     print("Status Code: ${response.statusCode}");
     print("Body: ${response.body}");
 
-    // Only throw error if body does NOT contain Success
     if (!response.body.contains("Success")) {
       throw Exception("Failed to save data");
     }
