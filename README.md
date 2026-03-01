@@ -1,16 +1,19 @@
 # ai_business_card_scanner
 
 A new Flutter project.
+# Flutter Business Card Scanner
 
-## Getting Started
+A Flutter app to **scan business cards using OCR**, extract contact details, and save them to **Google Sheets**. Includes a **Dashboard** to view saved contacts with **Call & WhatsApp integration**.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## 📂 Project Folder Structure
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```text
+lib/
+├── core/              # Shared utilities, helpers, constants, widgets
+├── data/              # Data sources & repository implementations
+├── domain/            # Entities & use cases (business logic)
+├── models/            # Data models (API / database)
+├── presentation/      # Screens, UI, state management 
+└── main.dart          # App entry point

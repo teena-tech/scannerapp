@@ -131,9 +131,7 @@ class _ScanScreenState extends State<ScanScreen> {
       // Save locally
       try {
         await localDataSource.saveContact(contact);
-        print("Saved locally ✅");
       } catch (e) {
-        print("Local save failed ❌: $e");
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(const SnackBar(content: Text("Failed to save locally")));
