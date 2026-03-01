@@ -27,6 +27,7 @@ class _ScanScreenState extends State<ScanScreen> {
   String extractedText = "";
   bool isLoading = false;
 
+  // Pick images
   Future<void> pickFrontImage() async {
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -45,6 +46,7 @@ class _ScanScreenState extends State<ScanScreen> {
     }
   }
 
+  // Extract info functions
   String extractEmail(String text) {
     final reg = RegExp(r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}');
     return reg.firstMatch(text)?.group(0) ?? "";
@@ -86,6 +88,7 @@ class _ScanScreenState extends State<ScanScreen> {
     return "";
   }
 
+  // Read OCR & Save
   Future<void> readText() async {
     if (frontImage == null && backImage == null) {
       setState(() {
@@ -109,6 +112,7 @@ class _ScanScreenState extends State<ScanScreen> {
         fullText += "\n${await ocr.extractText(backImage!.path)}";
       }
 
+      // Extract info
       final name = extractName(fullText);
       final phone = extractPhone(fullText);
       final email = extractEmail(fullText);
@@ -116,32 +120,57 @@ class _ScanScreenState extends State<ScanScreen> {
       final company = extractCompany(fullText);
 
       final contact = ContactModel(
-        name: name,
-        company: company,
-        phone: phone,
-        email: email,
-        website: website,
+        name: name.isNotEmpty ? name : "",
+        company: company.isNotEmpty ? company : "",
+        phone: phone.isNotEmpty ? phone : "",
+        email: email.isNotEmpty ? email : "",
+        website: website.isNotEmpty ? website : "",
         date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
       );
 
-      await localDataSource.saveContact(contact);
+      // Save locally
+      try {
+        await localDataSource.saveContact(contact);
+        print("Saved locally ✅");
+      } catch (e) {
+        print("Local save failed ❌: $e");
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Failed to save locally")));
+      }
 
-      await sheetService.save(contact);
+      // Save to Google Sheet
+      try {
+        await sheetService.save(contact);
+        print("Saved to Google Sheet ✅");
+      } catch (e) {
+        print("Google Sheet save failed ❌: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Saved locally but failed to save to Sheet"),
+          ),
+        );
+      }
 
+      // Show saved info
       setState(() {
         extractedText = """
 Saved Successfully!
 
-Name: $name
-Company: $company
-Phone: $phone
-Email: $email
-Website: $website
+Name: ${contact.name}
+Company: ${contact.company}
+Phone: ${contact.phone}
+Email: ${contact.email}
+Website: ${contact.website}
 """;
+
+        // Optional: Clear images after save
+        frontImage = null;
+        backImage = null;
       });
     } catch (e) {
       setState(() {
-        extractedText = "Error: ${e.toString()}";
+        extractedText = "Unexpected Error: ${e.toString()}";
       });
     }
 
