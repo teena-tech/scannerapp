@@ -4,7 +4,7 @@ import '../../models/contact_model.dart';
 
 class GoogleSheetService {
   final String _url =
-      "https://script.google.com/macros/s/AKfycbz0092iVcd39VvQ9ddkLluiff_d653EREzw3RavZG9-Kk_mqw8iFGWtt60VFMs27TR-/exec";
+      "=://script.google.com/macros/s/AKfycbz0092iVcd39VvQ9ddkLluiff_d653EREzw3RavZG9-Kk_mqw8iFGWtt60VFMs27TR-/exec";
 
   Future<void> save(ContactModel contact) async {
     try {
